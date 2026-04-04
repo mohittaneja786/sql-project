@@ -14,6 +14,7 @@ Create or Alter procedure Silver.load_silver As
 	Print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 	Print '>>>>>>>>>>>>  silver.Crm_cust_info>>>>>>>>>'
 
+	Truncate Table silver.Crm_cust_info
 	Insert into silver.Crm_cust_info 
 	(
 		cst_id,
@@ -44,7 +45,8 @@ Create or Alter procedure Silver.load_silver As
 		from(
 			select *,
 		Row_Number () Over ( Partition by cst_id order by cst_create_date DESC) as Flag_last
-	from bronze.crm_cust_info)t
+	from bronze.crm_cust_info
+	WHERE cst_id IS NOT NULL)t
 	where Flag_last = 1
 
 
